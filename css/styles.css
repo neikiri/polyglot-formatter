@@ -56,6 +56,7 @@ body {
   color: #58a6ff;
   line-height: 1;
   white-space: nowrap;
+  transform: translateY(2px);
 }
 
 .app-langs {
