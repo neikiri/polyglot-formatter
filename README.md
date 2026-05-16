@@ -33,7 +33,7 @@
 
 ---
 
-**Live version:** [https://neiki.eu/polyglot-formatter](https://neiki.eu/polyglot-formatter)
+**Live version:** [https://neikiri.dev/polyglot-formatter](https://neikiri.dev/polyglot-formatter)
 
 ---
 
@@ -174,4 +174,4 @@ GitHub: https://github.com/neikiri
 
 ## 📬 Contact
 
-📧 Email: dev@neiki.eu
+📧 Email: neikiri@neikiri.dev
