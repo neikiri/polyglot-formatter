@@ -1,39 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta name="description" content="Demo of Polyglot Formatter, a browser-based code beautifier for HTML, CSS, JavaScript, PHP and JSON."><meta name="robots" content="index, follow"><meta property="og:type" content="website"><meta property="og:title" content="Polyglot Formatter – Multi-Language Code Beautifier"><meta property="og:description" content="A browser-based code beautifier for HTML, CSS, JavaScript, PHP and JSON."><meta property="og:url" content="https://neikiri.dev/polyglot-formatter/"><meta name="twitter:card" content="summary">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Multi-Code Beautifier</title>
+    <meta name="description" content="Demo of Polyglot Formatter, a browser-based code beautifier for HTML, CSS, JavaScript, PHP and JSON.">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Polyglot Formatter – Multi-Language Code Beautifier">
+    <meta property="og:description" content="A browser-based code beautifier for HTML, CSS, JavaScript, PHP and JSON.">
+    <meta property="og:url" content="https://neikiri.dev/polyglot-formatter/">
+    <meta name="twitter:card" content="summary">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Code Beautifier</title>
 
-  <!-- CodeMirror CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+    <!-- CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
 
-  <!-- Prism.js CSS (Tomorrow Night theme) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <!-- Prism.js CSS (Tomorrow Night theme) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 
-  <!-- App CSS -->
-  <link rel="stylesheet" href="css/styles.css">
+    <!-- App CSS -->
+    <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
 
-  <div class="app-container">
+    <div class="app-container">
 
-    <!-- Toolbar -->
-    <div class="toolbar">
-      <div class="brand">
-        <img src="img/icon.png" height="32" alt="">
-        <span class="app-title">
-          Polyglot Formatter
-          <span class="app-langs">(HTML → CSS → JS → PHP → JSON)</span>
-        </span>
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <div class="brand">
+                <img src="img/icon.png" height="32" alt="">
+                <span class="app-title">
+                    Polyglot Formatter
+                    <span class="app-langs">(HTML → CSS → JS → PHP → JSON)</span>
+                </span>
 
-        <a href="https://github.com/neikiri/polyglot-formatter"
-         target="_blank"
-         class="github-btn">
-        <svg height="14" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 
+                <a href="https://github.com/neikiri/polyglot-formatter" target="_blank" class="github-btn">
+                    <svg height="14" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 
           7.59.4.07.55-.17.55-.38 
           0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52
           -.01-.53.63-.01 1.08.58 1.23.82.72 1.21 
@@ -48,110 +54,111 @@
           3.95.29.25.54.73.54 1.48 
           0 1.07-.01 1.93-.01 2.2 
           0 .21.15.46.55.38A8.013 8.013 0 
-          0016 8c0-4.42-3.58-8-8-8z"/>
-        </svg>
-      </a>
-    </div>
+          0016 8c0-4.42-3.58-8-8-8z" />
+                    </svg>
+                </a>
+            </div>
 
-      <div class="toolbar-actions">
-        <button id="btn-beautify" class="primary">Format</button>
-        <button id="btn-copy">Copy Output</button>
-        <button id="btn-clear">Clear</button>
-        <span id="detected-lang" class="detected-badge" style="display:none;"></span>
-      </div>
-    </div>
-
-    <!-- Options Bar -->
-    <div class="options-bar">
-      <label>
-        Indent:
-        <select id="opt-indent">
-          <option value="2">2</option>
-          <option value="4">4</option>
-        </select>
-      </label>
-      <span class="option-with-info">
-        <label>
-          <input type="checkbox" id="opt-newlines" checked>
-          Preserve Newlines
-        </label>
-        <button type="button" class="info-icon" aria-label="Prevents Deep Mode from adding new line breaks inside string values." title="Prevents Deep Mode from adding new line breaks inside string values.">i</button>
-        <span class="info-tooltip">Prevents Deep Mode from adding new line breaks inside string values.</span>
-      </span>
-      <label>
-        Wrap:
-        <input type="number" id="opt-wrap" value="120" min="40" max="300">
-      </label>
-      <label>
-        <input type="checkbox" id="opt-deep-mode">
-        Deep mode
-      </label>
-      <label>
-        <input type="checkbox" id="opt-quoted-keys" checked>
-        Preserve quoted keys
-      </label>
-      <div id="error-banner" class="error-banner"></div>
-    </div>
-    <div id="deep-mode-warning" class="mode-warning" style="display:none;">
-      ⚠ Deep mode may change runtime string values. CSS content strings and JSON string values are skipped by default.
-    </div>
-
-    <!-- Panels -->
-    <div class="panels">
-
-      <!-- Input Panel -->
-      <div class="panel">
-        <div class="panel-header">Input</div>
-        <div class="panel-body">
-          <textarea id="input-editor"></textarea>
+            <div class="toolbar-actions">
+                <button id="btn-beautify" class="primary">Format</button>
+                <button id="btn-copy">Copy Output</button>
+                <button id="btn-clear">Clear</button>
+                <span id="detected-lang" class="detected-badge" style="display:none;"></span>
+            </div>
         </div>
-      </div>
 
-      <!-- Output Panel -->
-      <div class="panel">
-        <div class="panel-header">Output</div>
-        <div class="panel-body">
-          <div class="output-wrapper">
-            <pre><code id="output-code"></code></pre>
-          </div>
+        <!-- Options Bar -->
+        <div class="options-bar">
+            <label>
+                Indent:
+                <select id="opt-indent">
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                </select>
+            </label>
+            <span class="option-with-info">
+                <label>
+                    <input type="checkbox" id="opt-newlines" checked>
+                    Preserve Newlines
+                </label>
+                <button type="button" class="info-icon" aria-label="Prevents Deep Mode from adding new line breaks inside string values." title="Prevents Deep Mode from adding new line breaks inside string values.">i</button>
+                <span class="info-tooltip">Prevents Deep Mode from adding new line breaks inside string values.</span>
+            </span>
+            <label>
+                Wrap:
+                <input type="number" id="opt-wrap" value="120" min="40" max="300">
+            </label>
+            <label>
+                <input type="checkbox" id="opt-deep-mode">
+                Deep mode
+            </label>
+            <label>
+                <input type="checkbox" id="opt-quoted-keys" checked>
+                Preserve quoted keys
+            </label>
+            <div id="error-banner" class="error-banner"></div>
         </div>
-      </div>
+        <div id="deep-mode-warning" class="mode-warning" style="display:none;">
+            ⚠ Deep mode may change runtime string values. CSS content strings and JSON string values are skipped by default.
+        </div>
+
+        <!-- Panels -->
+        <div class="panels">
+
+            <!-- Input Panel -->
+            <div class="panel">
+                <div class="panel-header">Input</div>
+                <div class="panel-body">
+                    <textarea id="input-editor"></textarea>
+                </div>
+            </div>
+
+            <!-- Output Panel -->
+            <div class="panel">
+                <div class="panel-header">Output</div>
+                <div class="panel-body">
+                    <div class="output-wrapper">
+                        <pre><code id="output-code"></code></pre>
+                    </div>
+                </div>
+            </div>
+
+        </div>
 
     </div>
 
-  </div>
+    <!-- CodeMirror JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/php/php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
 
-  <!-- CodeMirror JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/php/php.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+    <!-- Prism.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup-templating.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
 
-  <!-- Prism.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup-templating.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <!-- js-beautify -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify-html.min.js"></script>
 
-  <!-- js-beautify -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify-css.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify-html.min.js"></script>
-
-  <!-- App JS -->
-  <script src="js/config.js"></script>
-  <script src="js/beautify.js"></script>
-  <script src="js/highlight.js"></script>
-  <script src="js/ui.js"></script>
+    <!-- App JS -->
+    <script src="js/config.js"></script>
+    <script src="js/beautify.js"></script>
+    <script src="js/highlight.js"></script>
+    <script src="js/ui.js"></script>
 
 </body>
+
 </html>
